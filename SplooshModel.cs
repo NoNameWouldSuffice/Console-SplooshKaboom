@@ -30,25 +30,25 @@
 
 
         // startPoint is the "rear" of a ship and stopPoint is the "front" of a ship
-        public Ship(Point startPoint, Point stopPoint)
+        public Ship(int startRow, int startCol, int stopRow, int stopCol)
         {
 
             // 1. Check that the ship is longer than 1 space
-            if (startPoint == stopPoint)
+            if (startRow == stopRow && stopRow == stopCol)
             {
                 throw new ArgumentException("A ship must be longer than one space");
             }
             // 2. Check if Xstart == Xstop or Ystart == Ystop. Otherwise the ship is not in a straight, perpendicular line.
-            if (startPoint.R != stopPoint.R && startPoint.R != stopPoint.C)
+            if (startRow != stopRow && stopRow != stopCol)
             {
                 throw new ArgumentException("A ship must be placed either horizontally or vertically.");
             }
 
             // Need to check if the start and stop points are valid for the game board given?
 
-            for (int r = Math.Min(startPoint.R, stopPoint.R); r <= Math.Max(startPoint.R, stopPoint.R); r++)
+            for (int r = Math.Min(startRow, stopRow); r <= Math.Max(startRow, stopRow); r++)
             {
-                for (int c = Math.Min(startPoint.C, stopPoint.C); c <= Math.Max(startPoint.C, stopPoint.C); c++)
+                for (int c = Math.Min(startCol, stopCol); c <= Math.Max(startCol, stopCol); c++)
                 {
                     _points.Add(new Point(r, c));
                 }
@@ -58,7 +58,7 @@
             this._length = _points.Count;
 
             // Set initial direction based on if horizontal or vertical.
-            if (startPoint.R == stopPoint.R){
+            if (startRow == stopRow){
                 _orientation = Orientation.RIGHT;
             }
             else{
@@ -67,8 +67,10 @@
 
         }
 
+        public Ship(Point startPoint, Point stopPoint) : this(startPoint.R, startPoint.C, stopPoint.R, stopPoint.C){}
 
-        public bool isAlive(int[,] shotMap)
+
+        public bool IsAlive(int[,] shotMap)
         {
             int hits = 0;
             foreach (Point p in _points)
@@ -78,7 +80,7 @@
             return hits < _points.Count;
         }
 
-        public void printShit()
+        public void PrintSpaces()
         {
             Console.Write("[\t");
             foreach (Point p in _points)
@@ -88,7 +90,7 @@
             Console.WriteLine("]");
         }
 
-        public void flipDirection(){
+        public void FlipDirection(){
             switch (_orientation){
                 case Orientation.UP:
                     _orientation = Orientation.DOWN;
@@ -149,8 +151,7 @@
                 Ship ship;
 
                 if (SplooshUtil.FindValidShipPlacements(out axisOptions, _shipMap, shipLen, axis)){
-                    int axisOptionsIndex = SplooshUtil.GetRandom.Next(0, axisOptions.Count);
-                    Tuple<List<int>, List<int>> axisOption = axisOptions[axisOptionsIndex];
+                    Tuple<List<int>, List<int>> axisOption = SplooshUtil.GetRandomElement(axisOptions);
 
                     int rowIndex = SplooshUtil.GetRandom.Next(0, axisOption.Item1.Count);
                     int startRow = axisOption.Item1[rowIndex];

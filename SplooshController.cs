@@ -18,7 +18,7 @@ namespace Sploosh_Console
 
             Ship testShip = new(new Point(5,5), new Point(5,7));
 
-            testShip.printShit();
+            testShip.PrintSpaces();
 
             testBoard.PlaceShip(testShip);
 
@@ -29,13 +29,13 @@ namespace Sploosh_Console
             testBoard.FireShot(5,6);
             testBoard.FireShot(5,7);
 
-            bool shipHealth = testShip.isAlive(testBoard.GetShotMap);
+            bool shipHealth = testShip.IsAlive(testBoard.GetShotMap);
 
             Console.WriteLine(shipHealth);
 
             Console.WriteLine(testShip.GetOrientation);
 
-            testShip.flipDirection();
+            testShip.FlipDirection();
 
             Console.WriteLine(testShip.GetOrientation);
 
