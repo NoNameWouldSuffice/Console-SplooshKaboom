@@ -34,13 +34,14 @@
         {
 
             // 1. Check that the ship is longer than 1 space
-            if (startRow == stopRow && stopRow == stopCol)
+            if (startRow == stopRow && startCol == stopCol)
             {
                 throw new ArgumentException("A ship must be longer than one space");
             }
             // 2. Check if Xstart == Xstop or Ystart == Ystop. Otherwise the ship is not in a straight, perpendicular line.
-            if (startRow != stopRow && stopRow != stopCol)
+            if (startRow != stopRow && startCol != stopCol)
             {
+                Console.WriteLine($"Point1: ({startRow}, {startCol}) | Point2: ({stopRow},{stopCol})");
                 throw new ArgumentException("A ship must be placed either horizontally or vertically.");
             }
 
@@ -110,7 +111,9 @@
 
     class GameBoard(int width, int height)
     {
-        private List<int> _shipLengths = [2, 3, 4];
+        private List<int> _shipLengths = [5, 4, 3, 3, 2];
+
+
         private int[,] _shotMap = new int[height, width];
 
         public int[,] GetShotMap => _shotMap;
@@ -142,31 +145,55 @@
         }
 
         public void PlaceShipsRandomly(){
-            foreach (int shipLen in _shipLengths){
+            foreach (int shipLen in _shipLengths.OrderByDescending(i => i)){
                 // Choose if ship is being placed horizontally or vertically
 
                 int axis = SplooshUtil.GetRandom.Next(2);
 
-                List<Tuple<List<int>, List<int>>>  axisOptions = [];
+                List<Tuple<List<int>, List<int>>>  axisOptions;
+                Tuple<List<int>, List<int>> axisOption;
                 Ship ship;
 
                 if (SplooshUtil.FindValidShipPlacements(out axisOptions, _shipMap, shipLen, axis)){
-                    Tuple<List<int>, List<int>> axisOption = SplooshUtil.GetRandomElement(axisOptions);
+                    axisOption = SplooshUtil.GetRandomElement(axisOptions);
 
-                    int rowIndex = SplooshUtil.GetRandom.Next(0, axisOption.Item1.Count);
-                    int startRow = axisOption.Item1[rowIndex];
+                    int startRow = SplooshUtil.GetRandomElement(axisOption.Item1);
+                    int startCol = SplooshUtil.GetRandomElement(axisOption.Item2);
+                    ship = new Ship(
+                        startRow,
+                        startCol,
+                        startRow - axis * (shipLen - 1),
+                        startCol - (1 - axis) * (shipLen - 1)
+                    );
 
-                    int colIndex = SplooshUtil.GetRandom.Next(0, axisOption.Item2.Count);
-                    int startCol = axisOption.Item2[colIndex];
-
-                    Point stopPoint = (axis == 0) ? new Point(startRow, startCol - shipLen - 1) : new Point(startRow - shipLen - 1, startCol);
-
-                    ship = new Ship(new Point(startRow, startCol), stopPoint);
+                    if (SplooshUtil.RollChanceBool(0.5)){
+                        ship.FlipDirection();
+                    }
+                    this.PlaceShip(ship);
                 }
+                else if (SplooshUtil.FindValidShipPlacements(out axisOptions, _shipMap, shipLen, 1 - axis)){
+                    axisOption = SplooshUtil.GetRandomElement(axisOptions);
 
+                    int startRow = SplooshUtil.GetRandomElement(axisOption.Item1);
+                    int startCol = SplooshUtil.GetRandomElement(axisOption.Item2);
 
+                    ship = new Ship(
+                        startRow,
+                        startCol,
+                        startRow - (1 - axis) * (shipLen - 1),
+                        startCol - axis * (shipLen - 1)
+                    );
 
+                    if (SplooshUtil.RollChanceBool(0.5)){
+                        ship.FlipDirection();
+                    }
+                    this.PlaceShip(ship);
 
+                }
+                else{
+                    Console.WriteLine("Failed to place ship");
+                }
+            
             }
         }
 
