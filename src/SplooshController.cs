@@ -14,6 +14,7 @@ namespace Sploosh_Console
             //     testBoard.FireShot(7, i);
             // }
 
+            
             testBoard.PlaceShipsRandomly();
 
             testBoard.PrintShipMap();

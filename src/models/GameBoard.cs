@@ -1,7 +1,7 @@
 using SplooshUtil;
 class GameBoard(int width, int height)
 {
-    private List<int> _shipLengths = [5, 4, 3, 3, 2];
+    private List<int> _shipLengths = [4, 3, 2];
 
 
     private int[,] _shotMap = new int[height, width];
@@ -25,7 +25,7 @@ class GameBoard(int width, int height)
 
     public void PrintShipMap()
     {
-        SplooshArray.Print2DArray(_shotMap);
+        SplooshArray.Print2DArray(ShipMap);
     }
 
     public void PlaceShip(Ship ship)
