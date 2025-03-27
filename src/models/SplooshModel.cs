@@ -120,6 +120,8 @@
         public int[,] ShipMap{get; set;} = new int[height, width];
         // public int[,] GetShipMap => _shipMap;
 
+        private List<Ship> _shipList = [];
+
         public void FireShot(int shotR, int shotC)
         {
             // TODO: Add in some verification code somewhere for when the shot is outside of game board range
@@ -128,12 +130,12 @@
 
         public void PrintShotMap()
         {
-            SplooshUtil.Print2DArray(_shotMap);
+            SplooshUtil.SplooshArray.Print2DArray(_shotMap);
         }
 
         public void PrintShipMap()
         {
-            SplooshUtil.Print2DArray(ShipMap);
+            SplooshUtil.SplooshArray.Print2DArray(_shotMap);
         }
 
         public void PlaceShip(Ship ship)
@@ -148,17 +150,17 @@
             foreach (int shipLen in _shipLengths.OrderByDescending(i => i)){
                 // Choose if ship is being placed horizontally or vertically
 
-                int axis = SplooshUtil.GetRandom.Next(2);
+                int axis = SplooshUtil.SplooshRandom.GetRandom.Next(2);
 
                 List<Tuple<List<int>, List<int>>>  axisOptions;
                 Tuple<List<int>, List<int>> axisOption;
                 Ship ship;
 
-                if (SplooshUtil.FindValidShipPlacements(out axisOptions, ShipMap, shipLen, axis)){
-                    axisOption = SplooshUtil.GetRandomElement(axisOptions);
+                if (FindValidShipPlacements(out axisOptions, shipLen, axis)){
+                    axisOption = SplooshUtil.SplooshRandom.GetRandomElement(axisOptions);
 
-                    int startRow = SplooshUtil.GetRandomElement(axisOption.Item1);
-                    int startCol = SplooshUtil.GetRandomElement(axisOption.Item2);
+                    int startRow = SplooshUtil.SplooshRandom.GetRandomElement(axisOption.Item1);
+                    int startCol = SplooshUtil.SplooshRandom.GetRandomElement(axisOption.Item2);
                     ship = new Ship(
                         startRow,
                         startCol,
@@ -166,16 +168,16 @@
                         startCol - (1 - axis) * (shipLen - 1)
                     );
 
-                    if (SplooshUtil.RollChanceBool(0.5)){
+                    if (SplooshUtil.SplooshRandom.RollChanceBool(0.5)){
                         ship.FlipDirection();
                     }
-                    this.PlaceShip(ship);
+                    PlaceShip(ship);
                 }
-                else if (SplooshUtil.FindValidShipPlacements(out axisOptions, ShipMap, shipLen, 1 - axis)){
-                    axisOption = SplooshUtil.GetRandomElement(axisOptions);
+                else if (FindValidShipPlacements(out axisOptions, shipLen, 1 - axis)){
+                    axisOption = SplooshUtil.SplooshRandom.GetRandomElement(axisOptions);
 
-                    int startRow = SplooshUtil.GetRandomElement(axisOption.Item1);
-                    int startCol = SplooshUtil.GetRandomElement(axisOption.Item2);
+                    int startRow = SplooshUtil.SplooshRandom.GetRandomElement(axisOption.Item1);
+                    int startCol = SplooshUtil.SplooshRandom.GetRandomElement(axisOption.Item2);
 
                     ship = new Ship(
                         startRow,
@@ -184,10 +186,10 @@
                         startCol - axis * (shipLen - 1)
                     );
 
-                    if (SplooshUtil.RollChanceBool(0.5)){
+                    if (SplooshUtil.SplooshRandom.RollChanceBool(0.5)){
                         ship.FlipDirection();
                     }
-                    this.PlaceShip(ship);
+                    PlaceShip(ship);
 
                 }
                 else{
@@ -199,35 +201,8 @@
 
         }
 
-    }
 
-    class SplooshUtil()
-    {
-        private static readonly Random random = new();
-
-        public static Random GetRandom => random;
-
-        public static bool RollChanceBool(double probability){
-            if (probability < 0 || probability > 1)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(probability), "Probability must be between 0 and 1.");
-                }
-            
-            return random.NextDouble() < probability;
-        }
-        public static void Print2DArray<T>(T[,] matrix)
-        {
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    Console.Write(matrix[i, j] + "\t");
-                }
-                Console.WriteLine();
-            }
-        }
-
-        public static bool FindValidShipPlacements(out List<Tuple<List<int>, List<int>>> axisOptions, int[,] board, int shipLength, int axis){
+        private bool FindValidShipPlacements(out List<Tuple<List<int>, List<int>>> axisOptions, int shipLength, int axis){
             
             if (axis != 0 && axis != 1){
                 throw new ArgumentOutOfRangeException(nameof(axis), "Axis must be 0 or 1 for two dimensional game board");
@@ -235,11 +210,11 @@
 
             axisOptions = [];
 
-            for (int lineIndex = 0; lineIndex < board.GetLength(axis); lineIndex++){
+            for (int lineIndex = 0; lineIndex < ShipMap.GetLength(axis); lineIndex++){
                 int count = 0;
                 List<int> lineOptions = [];
-                for (int step = 0; step < board.GetLength(1-axis); step++){
-                    int val = (axis==0) ? board[lineIndex,step] : board[step,lineIndex];
+                for (int step = 0; step < ShipMap.GetLength(1-axis); step++){
+                    int val = (axis==0) ? ShipMap[lineIndex,step] : ShipMap[step,lineIndex];
                     if (val == 0){
                         count += 1;
                         if (count >= shipLength){
@@ -264,15 +239,7 @@
             return axisOptions.Count > 0;
 
         }
-
-        public static T GetRandomElement<T>(List<T> list)
-    {
-        if (list == null || list.Count == 0)
-            throw new ArgumentException("List cannot be null or empty.");
-
-        int index = random.Next(list.Count);
-        return list[index];
     }
+
     
-    }
 }
