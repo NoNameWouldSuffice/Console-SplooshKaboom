@@ -117,7 +117,7 @@
         private int[,] _shotMap = new int[height, width];
 
         public int[,] GetShotMap => _shotMap;
-        public int[,] _shipMap{get; set;} = new int[height, width];
+        public int[,] ShipMap{get; set;} = new int[height, width];
         // public int[,] GetShipMap => _shipMap;
 
         public void FireShot(int shotR, int shotC)
@@ -133,14 +133,14 @@
 
         public void PrintShipMap()
         {
-            SplooshUtil.Print2DArray(_shipMap);
+            SplooshUtil.Print2DArray(ShipMap);
         }
 
         public void PlaceShip(Ship ship)
         {
             foreach (Point p in ship.GetPoints)
             {
-                _shipMap[p.R, p.C] = 1;
+                ShipMap[p.R, p.C] = 1;
             }
         }
 
@@ -154,7 +154,7 @@
                 Tuple<List<int>, List<int>> axisOption;
                 Ship ship;
 
-                if (SplooshUtil.FindValidShipPlacements(out axisOptions, _shipMap, shipLen, axis)){
+                if (SplooshUtil.FindValidShipPlacements(out axisOptions, ShipMap, shipLen, axis)){
                     axisOption = SplooshUtil.GetRandomElement(axisOptions);
 
                     int startRow = SplooshUtil.GetRandomElement(axisOption.Item1);
@@ -171,7 +171,7 @@
                     }
                     this.PlaceShip(ship);
                 }
-                else if (SplooshUtil.FindValidShipPlacements(out axisOptions, _shipMap, shipLen, 1 - axis)){
+                else if (SplooshUtil.FindValidShipPlacements(out axisOptions, ShipMap, shipLen, 1 - axis)){
                     axisOption = SplooshUtil.GetRandomElement(axisOptions);
 
                     int startRow = SplooshUtil.GetRandomElement(axisOption.Item1);
@@ -195,6 +195,8 @@
                 }
             
             }
+
+
         }
 
     }
