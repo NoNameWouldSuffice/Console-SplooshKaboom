@@ -14,31 +14,35 @@ namespace SplooshUtil
         DOWN
     }
 
-    class SplooshRandom(){
-        
+    class SplooshRandom()
+    {
+
         private static readonly Random random = new();
 
         public static Random GetRandom => random;
 
-        public static bool RollChanceBool(double probability){
+        public static bool RollChanceBool(double probability)
+        {
             if (probability < 0 || probability > 1)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(probability), "Probability must be between 0 and 1.");
-                }
-            
+            {
+                throw new ArgumentOutOfRangeException(nameof(probability), "Probability must be between 0 and 1.");
+            }
+
             return random.NextDouble() < probability;
         }
-        
-        public static T GetRandomElement<T>(List<T> list){
-        if (list == null || list.Count == 0)
-            throw new ArgumentException("List cannot be null or empty.");
 
-        int index = random.Next(list.Count);
-        return list[index];
-        }   
+        public static T GetRandomElement<T>(List<T> list)
+        {
+            if (list == null || list.Count == 0)
+                throw new ArgumentException("List cannot be null or empty.");
+
+            int index = random.Next(list.Count);
+            return list[index];
+        }
     }
 
-    class SplooshArray(){
+    class SplooshArray()
+    {
         public static void Print2DArray<T>(T[,] matrix)
         {
             for (int i = 0; i < matrix.GetLength(0); i++)
