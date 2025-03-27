@@ -1,5 +1,18 @@
 namespace SplooshUtil
 {
+    record struct Point(int R, int C)
+    {
+        public override string ToString() => $"({R}, {C})";
+    };
+
+    enum Orientation
+    {
+        UNSET,
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
+    }
 
     class SplooshRandom(){
         
