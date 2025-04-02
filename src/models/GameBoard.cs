@@ -34,6 +34,15 @@ class GameBoard(int width, int height)
         {
             ShipMap[p.R, p.C] = 1;
         }
+
+        _shipList.Add(ship);
+    }
+
+    // Thought: A View trying to request the list of ships when the game board doesn't have one yet is a case to consider if 
+    // Game board object does not have a list of ships after construction. Ships might be added to the GameBoard's ship list manually
+    // using PlaceShip (i.e. for loading/saving a game) or automatically when ships are randomised at the start of a new game.
+    public List<Ship> GetShips(){
+        return _shipList;
     }
 
     public void PlaceShipsRandomly()
