@@ -1,6 +1,8 @@
 using SplooshUtil;
 class GameBoard(int width, int height)
 {
+    public readonly int Width = width;
+    public readonly int Height = height;
     private List<int> _shipLengths = [4, 3, 2];
 
 
@@ -9,7 +11,7 @@ class GameBoard(int width, int height)
     public int[,] GetShotMap => _shotMap;
     public int[,] ShipMap { get; set; } = new int[height, width];
     // public int[,] GetShipMap => _shipMap;
-
+    
     private List<Ship> _shipList = [];
 
     public void FireShot(int shotR, int shotC)
