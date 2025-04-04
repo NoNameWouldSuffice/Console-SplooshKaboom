@@ -1,3 +1,4 @@
+using System.Data;
 using SplooshUtil;
 class GameBoard(int width, int height)
 {
@@ -45,6 +46,16 @@ class GameBoard(int width, int height)
     // using PlaceShip (i.e. for loading/saving a game) or automatically when ships are randomised at the start of a new game.
     public List<Ship> GetShips(){
         return _shipList;
+    }
+
+    public int[,] GetResultMap(){
+        int[,] resultMap = new int[Height,Width];
+        for (int r = 0; r < Height; r++){
+            for (int c = 0; c < Width; c++){
+                resultMap[r, c] = (_shotMap[r,c] == 1 && ShipMap[r,c] == 1) ? 2 : (_shotMap[r,c] == 1) ? 1 : 0;
+            }
+        }
+        return resultMap;
     }
 
     public void PlaceShipsRandomly()
