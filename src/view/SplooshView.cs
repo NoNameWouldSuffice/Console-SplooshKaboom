@@ -1,3 +1,6 @@
+using System.Runtime.InteropServices;
+using System.Text;
+
 class SplooshView{
     private GameBoard gb;
 
@@ -5,7 +8,7 @@ class SplooshView{
 
     private readonly int COL_MARGIN = 2;
 
-    SplooshView(GameBoard boardIn){
+    public SplooshView(GameBoard boardIn){
         gb = boardIn;
     }
 
@@ -24,26 +27,74 @@ class SplooshView{
     }
 
     private int GetColChars(int col){
-        return 4 * col + 1 + COL_MARGIN;
+        return 4 * col + 2 + COL_MARGIN;
     }
     private char[,] BuildGridLayer(){
-        return new char[1,1];
+        StringBuilder sb = new();
+        // Include space for column numbers
+        sb.Append(string.Concat(Enumerable.Repeat(" ", GetWidthChars(gb.Width))));
+        sb.Append('\n');
+        sb.Append("  ╔");
+		sb.Append(string.Concat(Enumerable.Repeat("═══╤", gb.Width - 1)));
+		sb.Append("═══╗\n");
+		
+		for (int i = 0; i < gb.Height - 1; i++){
+			
+			sb.Append("  ║");
+			sb.Append(string.Concat(Enumerable.Repeat("   │", gb.Width - 1)));
+			sb.Append("   ║\n");
+			
+			sb.Append("  ╟");
+			sb.Append(string.Concat(Enumerable.Repeat("───┼", gb.Width - 1)));
+			sb.Append("───╢\n");
+		}
+		
+		sb.Append("  ║");
+		sb.Append(string.Concat(Enumerable.Repeat("   │", gb.Width - 1)));
+		sb.Append("   ║\n");
+		
+		sb.Append("  ╚");
+		sb.Append(string.Concat(Enumerable.Repeat("═══╧", gb.Width - 1)));
+		sb.Append("═══╝");
+		
+		char[,] chrArr = SplooshUtil.SplooshGrid.ConvertStringToCharArray(sb.ToString());
+		
+        return chrArr;
     }
 
-    private char[,] BuildShipLayer(){
-        return new char[1,1];
+    private void AddLabelsToGrid(char[,] grid){
+        for (int c = 0; c < gb.Width; c++){
+            grid[0, GetColChars(c)] = (c + 1).ToString()[0];
+        }
+
+        string labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (int r = 0; r < gb.Height; r++){
+            grid[GetRowChars(r), 0] = labels[r];
+        }
     }
 
-    private char[,] BuildShotLayer(){
-        return new char[1,1];
+    private void AddShipsToGrid(char[,] grid){
+
     }
 
-    private char[,] BuildLabelLayer(){
-        return new char[1,1];
+    private void AddShotsToGrid(char[,] grid){
+        int[,] resultMap = gb.GetResultMap();
+        for (int r = 0; r < gb.Height; r++){
+            for (int c = 0; c < gb.Width; c++){
+                grid[GetRowChars(r), GetColChars(c)] = (resultMap[r,c] == 1) ? 'M' : (resultMap[r,c] == 2) ? 'H' : ' '; 
+            }
+        }
     }
 
-    private char[,] CompileLayers(){
-        return new char[1,1];
+    public void CompileLayers(){
+        char[,] grid = BuildGridLayer();
+        AddLabelsToGrid(grid);
+
+        AddShotsToGrid(grid);
+        string gridString = SplooshUtil.SplooshGrid.ConvertCharArrayToString(grid);
+        Console.WriteLine(gridString);
+
+        Console.WriteLine("╿");
     }
 
     

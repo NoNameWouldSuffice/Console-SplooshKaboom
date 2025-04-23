@@ -19,6 +19,18 @@ namespace Sploosh_Console
 
             testBoard.PrintShipMap();
 
+            SplooshView testView = new(testBoard);
+
+            for (int r = 0; r < testBoard.Height; r++){
+                for (int c = 0; c < testBoard.Width; c++){
+                    if (r % 2 == 0){
+                        testBoard.FireShot(r, c);
+                    }
+                }
+            }
+
+            testView.CompileLayers();
+
 
 
 
