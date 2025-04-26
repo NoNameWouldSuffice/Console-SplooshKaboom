@@ -1,5 +1,5 @@
-using System.Runtime.InteropServices;
 using System.Text;
+using SplooshUtil;
 
 class SplooshView{
     private GameBoard gb;
@@ -74,14 +74,24 @@ class SplooshView{
     }
 
     private void AddShipsToGrid(char[,] grid){
+        foreach (Ship ship in gb.GetShips()){
+            Point startPoint = ship.GetPoints.First();
+            Point stopPoint = ship.GetPoints.Last();
 
+
+            for (int r = GetRowChars(startPoint.R); r <= GetRowChars(stopPoint.R); r++){
+                for (int c = GetColChars(startPoint.C); c <= GetColChars(stopPoint.C); c++){
+                    grid[r,c] = '┃';
+                }
+            }
+        }
     }
 
     private void AddShotsToGrid(char[,] grid){
         int[,] resultMap = gb.GetResultMap();
         for (int r = 0; r < gb.Height; r++){
             for (int c = 0; c < gb.Width; c++){
-                grid[GetRowChars(r), GetColChars(c)] = (resultMap[r,c] == 1) ? 'M' : (resultMap[r,c] == 2) ? 'H' : ' '; 
+                grid[GetRowChars(r), GetColChars(c)] = (resultMap[r,c] == 1) ? 'M' : (resultMap[r,c] == 2) ? 'H' : grid[GetRowChars(r), GetColChars(c)]; 
             }
         }
     }
@@ -89,12 +99,10 @@ class SplooshView{
     public void CompileLayers(){
         char[,] grid = BuildGridLayer();
         AddLabelsToGrid(grid);
-
+        AddShipsToGrid(grid);
         AddShotsToGrid(grid);
-        string gridString = SplooshUtil.SplooshGrid.ConvertCharArrayToString(grid);
+        string gridString = SplooshGrid.ConvertCharArrayToString(grid);
         Console.WriteLine(gridString);
-
-        Console.WriteLine("╿");
     }
 
     

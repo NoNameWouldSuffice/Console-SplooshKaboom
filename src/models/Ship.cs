@@ -36,7 +36,7 @@ class Ship
         }
 
 
-        this._length = _points.Count;
+        _length = _points.Count;
 
         if (startRow == stopRow)
         {
