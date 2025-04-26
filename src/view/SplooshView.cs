@@ -110,12 +110,18 @@ class SplooshView{
         }
     }
 
-    public void CompileLayers(){
+    public string CompileLayers(){
         char[,] grid = BuildGridLayer();
         AddLabelsToGrid(grid);
         AddShipsToGrid(grid);
         AddShotsToGrid(grid);
-        string gridString = SplooshGrid.ConvertCharArrayToString(grid);
+        return SplooshGrid.ConvertCharArrayToString(grid);
+        
+    }
+
+    public void Update(){
+        Console.Clear();
+        string gridString = CompileLayers();
         Console.WriteLine(gridString);
     }
 
