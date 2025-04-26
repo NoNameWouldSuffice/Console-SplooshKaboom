@@ -81,8 +81,17 @@ class SplooshView{
 
             for (int r = GetRowChars(startPoint.R); r <= GetRowChars(stopPoint.R); r++){
                 for (int c = GetColChars(startPoint.C); c <= GetColChars(stopPoint.C); c++){
-                    grid[r,c] = '┃';
+                    grid[r,c] = ship.GetOrientation == Orientation.HORIZ ? '━' : '┃';
                 }
+            }
+
+            if (ship.GetOrientation == Orientation.HORIZ){
+                grid[GetRowChars(startPoint.R), GetColChars(startPoint.C) - 1] = '╼';
+                grid[GetRowChars(stopPoint.R), GetColChars(stopPoint.C) + 1] = '╾';
+            }
+            else{
+                grid[GetRowChars(startPoint.R), GetColChars(startPoint.C)] = '╽';
+                grid[GetRowChars(stopPoint.R), GetColChars(stopPoint.C)] = '╿';
             }
         }
     }
@@ -91,7 +100,12 @@ class SplooshView{
         int[,] resultMap = gb.GetResultMap();
         for (int r = 0; r < gb.Height; r++){
             for (int c = 0; c < gb.Width; c++){
-                grid[GetRowChars(r), GetColChars(c)] = (resultMap[r,c] == 1) ? 'M' : (resultMap[r,c] == 2) ? 'H' : grid[GetRowChars(r), GetColChars(c)]; 
+                int charCol = GetColChars(c);
+                if (grid[GetRowChars(r), GetColChars(c)] == '╽' || grid[GetRowChars(r), GetColChars(c)] == '╿'){
+                    charCol += 1;
+                }
+
+                grid[GetRowChars(r), charCol] = (resultMap[r,c] == 1) ? 'M' : (resultMap[r,c] == 2) ? 'H' : grid[GetRowChars(r), charCol]; 
             }
         }
     }
