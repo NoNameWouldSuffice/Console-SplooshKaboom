@@ -82,11 +82,6 @@ class GameBoard(int width, int height)
                     startRow - axis * (shipLen - 1),
                     startCol - (1 - axis) * (shipLen - 1)
                 );
-
-                if (SplooshRandom.RollChanceBool(0.5))
-                {
-                    ship.FlipDirection();
-                }
                 PlaceShip(ship);
             }
             else if (FindValidShipPlacements(out axisOptions, shipLen, 1 - axis))
@@ -102,11 +97,6 @@ class GameBoard(int width, int height)
                     startRow - (1 - axis) * (shipLen - 1),
                     startCol - axis * (shipLen - 1)
                 );
-
-                if (SplooshRandom.RollChanceBool(0.5))
-                {
-                    ship.FlipDirection();
-                }
                 PlaceShip(ship);
 
             }

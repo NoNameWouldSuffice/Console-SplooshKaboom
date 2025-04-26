@@ -10,10 +10,8 @@ namespace SplooshUtil
     enum Orientation
     {
         UNSET,
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN
+        HORIZ,
+        VERT
     }
 
     class SplooshRandom()
