@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace SplooshUtil
 {
     record struct Point(int R, int C)
@@ -8,10 +10,8 @@ namespace SplooshUtil
     enum Orientation
     {
         UNSET,
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN
+        HORIZ,
+        VERT
     }
 
     class SplooshRandom()
@@ -54,6 +54,44 @@ namespace SplooshUtil
                 Console.WriteLine();
             }
         }
+    }
+
+    class SplooshGrid(){
+        public static char[,] ConvertStringToCharArray(string grid)
+    {
+        // Split the grid into lines
+        string[] lines = grid.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+        // Determine dimensions
+        int rows = lines.Length;
+        int cols = lines[0].Length; // Assumes all rows are of equal length
+
+        // Create char array
+        char[,] charArray = new char[rows, cols];
+
+        // Fill the 2D array
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                charArray[i, j] = lines[i][j];
+            }
+        }
+
+        return charArray;
+    }
+
+    public static string ConvertCharArrayToString(char[,] arr){
+		StringBuilder sb = new();
+		
+		for (int r = 0; r < arr.GetLength(0); r++){
+			for (int c = 0; c < arr.GetLength(1); c++){
+				sb.Append(arr[r,c]);
+			}
+			sb.Append('\n');
+		}
+		return sb.ToString();
+	}
     }
 
 

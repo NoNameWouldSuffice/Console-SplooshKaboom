@@ -10,6 +10,8 @@ class Ship
 
     public Orientation GetOrientation => _orientation;
 
+
+
     private int _length = 0;
     public int GetLength => _length;
 
@@ -36,15 +38,15 @@ class Ship
         }
 
 
-        this._length = _points.Count;
+        _length = _points.Count;
 
         if (startRow == stopRow)
         {
-            _orientation = Orientation.RIGHT;
+            _orientation = Orientation.HORIZ;
         }
         else
         {
-            _orientation = Orientation.UP;
+            _orientation = Orientation.VERT;
         }
 
     }
@@ -70,24 +72,5 @@ class Ship
             Console.Write(p + " ");
         }
         Console.WriteLine("]");
-    }
-
-    public void FlipDirection()
-    {
-        switch (_orientation)
-        {
-            case Orientation.UP:
-                _orientation = Orientation.DOWN;
-                break;
-            case Orientation.DOWN:
-                _orientation = Orientation.UP;
-                break;
-            case Orientation.LEFT:
-                _orientation = Orientation.RIGHT;
-                break;
-            case Orientation.RIGHT:
-                _orientation = Orientation.LEFT;
-                break;
-        }
     }
 }

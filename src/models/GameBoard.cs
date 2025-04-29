@@ -1,6 +1,9 @@
+using System.Data;
 using SplooshUtil;
 class GameBoard(int width, int height)
 {
+    public readonly int Width = width;
+    public readonly int Height = height;
     private List<int> _shipLengths = [4, 3, 2];
 
 
@@ -9,7 +12,7 @@ class GameBoard(int width, int height)
     public int[,] GetShotMap => _shotMap;
     public int[,] ShipMap { get; set; } = new int[height, width];
     // public int[,] GetShipMap => _shipMap;
-
+    
     private List<Ship> _shipList = [];
 
     public void FireShot(int shotR, int shotC)
@@ -34,6 +37,25 @@ class GameBoard(int width, int height)
         {
             ShipMap[p.R, p.C] = 1;
         }
+
+        _shipList.Add(ship);
+    }
+
+    // Thought: A View trying to request the list of ships when the game board doesn't have one yet is a case to consider if 
+    // Game board object does not have a list of ships after construction. Ships might be added to the GameBoard's ship list manually
+    // using PlaceShip (i.e. for loading/saving a game) or automatically when ships are randomised at the start of a new game.
+    public List<Ship> GetShips(){
+        return _shipList;
+    }
+
+    public int[,] GetResultMap(){
+        int[,] resultMap = new int[Height,Width];
+        for (int r = 0; r < Height; r++){
+            for (int c = 0; c < Width; c++){
+                resultMap[r, c] = (_shotMap[r,c] == 1 && ShipMap[r,c] == 1) ? 2 : (_shotMap[r,c] == 1) ? 1 : 0;
+            }
+        }
+        return resultMap;
     }
 
     public void PlaceShipsRandomly()
@@ -60,11 +82,6 @@ class GameBoard(int width, int height)
                     startRow - axis * (shipLen - 1),
                     startCol - (1 - axis) * (shipLen - 1)
                 );
-
-                if (SplooshRandom.RollChanceBool(0.5))
-                {
-                    ship.FlipDirection();
-                }
                 PlaceShip(ship);
             }
             else if (FindValidShipPlacements(out axisOptions, shipLen, 1 - axis))
@@ -80,11 +97,6 @@ class GameBoard(int width, int height)
                     startRow - (1 - axis) * (shipLen - 1),
                     startCol - axis * (shipLen - 1)
                 );
-
-                if (SplooshRandom.RollChanceBool(0.5))
-                {
-                    ship.FlipDirection();
-                }
                 PlaceShip(ship);
 
             }
