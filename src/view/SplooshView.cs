@@ -105,7 +105,7 @@ class SplooshView{
                     charCol += 1;
                 }
 
-                grid[GetRowChars(r), charCol] = (resultMap[r,c] == 1) ? 'M' : (resultMap[r,c] == 2) ? 'H' : grid[GetRowChars(r), charCol]; 
+                grid[GetRowChars(r), charCol] = (resultMap[r,c] == 1) ? '⨉' : (resultMap[r,c] == 2) ? '*' : grid[GetRowChars(r), charCol]; 
             }
         }
     }
