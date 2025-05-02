@@ -6,6 +6,8 @@
     <RootNamespace>Console_SplooshKaboom</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PublishSingleFile>true</PublishSingleFile>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
 </Project>
