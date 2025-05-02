@@ -2,7 +2,7 @@
 
 ### 🗺️ Overview
 
-This project is an unofficial, single-player, console-based version of Battleships inspired by the squid hunt minigame in *The Legend of Zelda: The Wind Waker*. The game is currently in a unstable, "bare bones" state and will be expanded over time with new features and improvements.
+This project is an unofficial, single-player, console-based version of Battleships inspired by the squid hunt minigame in *The Legend of Zelda: The Wind Waker*. The game is currently in an unstable, "bare bones" state and will be expanded over time with new features and improvements.
 
 
 ### 🌱 Objective
