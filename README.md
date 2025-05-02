@@ -10,7 +10,7 @@ This project is an unofficial, single-player, console-based version of Battleshi
 The main objective of this project is to help me grow as a C# developer. I’m learning project management on GitHub alongside developing software with the .NET framework. I aim to improve both the quality of the code and the organisation of the project as my knowledge in both areas continues to grow.
 
 ### 📖 Setup Instructions
-
+*(Initial release coming soon)*
 Simply download the latest binary released for your platform and execute it in your favourite terminal.
 
 ### ⚖️ License
