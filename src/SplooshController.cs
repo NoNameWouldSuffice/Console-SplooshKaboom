@@ -4,20 +4,55 @@ namespace Sploosh_Console
 {
     class SplooshController()
     {
+        static ConsoleKeyInfo cki;
         static GameBoard board = new(8,8);
         public static void Main()
         {
             SplooshView boardView = new(board);
+            bool fire;
             board.PlaceShipsRandomly();
 
             while (!GameWon())
             {
                 boardView.Update();
-                Point target = GetTargetFromUser();
-                board.FireShot(target.R, target.C);
+                fire = false;
+
+                while (!fire){
+                    cki = Console.ReadKey();
+                    switch (cki.Key)
+                    {
+                        case ConsoleKey.RightArrow:
+                            boardView.boardCursorCol = Math.Min(board.Width - 1, boardView.boardCursorCol + 1);
+                            break;
+                        
+                        case ConsoleKey.LeftArrow:
+                            boardView.boardCursorCol = Math.Max(0, boardView.boardCursorCol - 1);
+                            break;
+                        
+                        case ConsoleKey.UpArrow:
+                            boardView.boardCursorRow = Math.Max(0, boardView.boardCursorRow - 1);
+                            break;
+                        
+                        case ConsoleKey.DownArrow:
+                            boardView.boardCursorRow = Math.Min(board.Height - 1, boardView.boardCursorRow + 1);
+                            break;
+                        
+                        case ConsoleKey.Spacebar:
+                            fire = true;
+                            break;
+                        
+                        default:
+                            break;
+                    }
+
+                    boardView.Update();
+                }
+
+                board.FireShot(boardView.boardCursorRow, boardView.boardCursorCol);
             }
 
             boardView.showShips = true;
+            boardView.showCursor = false;
             boardView.Update();
             Console.WriteLine("Game won. 'Grats man.");
         }
@@ -31,38 +66,5 @@ namespace Sploosh_Console
 
         return true;
         }
-    
-    private static Point GetTargetFromUser(){
-        while(true){
-
-            Console.Write("Input target: letter+number pair: ");
-            
-            string userInput = Console.ReadLine() ?? string.Empty;
-
-            char letterInput = userInput[0];
-
-            int colNum;
-
-            bool intParseSuccess = int.TryParse(userInput[1..], out colNum);
-
-            string alphabetString = "abcdefghijklmnopqrstuvwxyz";
-
-            int rowNum = alphabetString.IndexOf(char.ToLower(letterInput));
-
-            if (intParseSuccess && rowNum >= 0){
-                return new Point(rowNum, colNum - 1);
-            }
-            
-            Console.WriteLine("Invalid input. Try again.");
-
-
-
-
-
-    }
-
-
-        
-    }
 }
 }
