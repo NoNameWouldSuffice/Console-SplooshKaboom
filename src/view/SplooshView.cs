@@ -5,10 +5,6 @@ class SplooshView
 {
     private GameBoard gb;
 
-    private readonly int ROW_MARGIN = 1;
-
-    private readonly int COL_MARGIN = 2;
-
     public bool showShips = false;
 
     public bool showCursor = true;
