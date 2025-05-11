@@ -12,6 +12,9 @@ class SplooshView
     public int boardCursorRow = 0;
     public int boardCursorCol = 0;
 
+    public int homeRow = 0;
+    public int homeCol = 0;
+
     public SplooshView(GameBoard boardIn)
     {
         gb = boardIn;
@@ -141,7 +144,7 @@ class SplooshView
 
     public void Update()
     {
-        Console.Clear();
+        Console.SetCursorPosition(homeCol, homeRow);
         string gridString = CompileLayers();
         Console.WriteLine(gridString);
     }

@@ -16,6 +16,9 @@ namespace Sploosh_Console
             bool fire;
             board.PlaceShipsRandomly();
 
+            boardView.homeRow = Console.CursorTop;
+            boardView.homeCol = Console.CursorLeft;
+
             while (!GameWon())
             {
                 boardView.Update();
