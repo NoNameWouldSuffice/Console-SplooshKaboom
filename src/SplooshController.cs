@@ -15,7 +15,7 @@ namespace Sploosh_Console
             SplooshView boardView = new(board);
             bool fire;
             board.PlaceShipsRandomly();
-
+            Console.Clear();
             boardView.homeRow = Console.CursorTop;
             boardView.homeCol = Console.CursorLeft;
 
