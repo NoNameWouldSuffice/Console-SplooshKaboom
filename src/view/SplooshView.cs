@@ -11,6 +11,11 @@ class SplooshView
 
     public bool showShips = false;
 
+    public bool showCursor = true;
+
+    public int boardCursorRow = 0;
+    public int boardCursorCol = 0;
+
     public SplooshView(GameBoard boardIn)
     {
         gb = boardIn;
@@ -133,12 +138,24 @@ class SplooshView
         }
     }
 
+    private void AddCursorToGrid(char[,] grid){
+        int selCharRow = GetRowChars(boardCursorRow);
+        int selCharCol = GetColChars(boardCursorCol);
+
+        grid[selCharRow - 1, selCharCol] = '┳';
+        grid[selCharRow + 1, selCharCol] = '┻';
+        grid[selCharRow, selCharCol - 2] = '┣';
+        grid[selCharRow, selCharCol + 2] = '┫';
+    }
+
     public string CompileLayers()
     {
         char[,] grid = BuildGridLayer();
         AddLabelsToGrid(grid);
         if (showShips) { AddShipsToGrid(grid); }
         AddShotsToGrid(grid);
+
+        if (showCursor){AddCursorToGrid(grid);}
         return SplooshGrid.ConvertCharArrayToString(grid);
 
     }
