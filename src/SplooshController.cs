@@ -62,6 +62,8 @@ namespace Sploosh_Console
             boardView.showCursor = false;
             boardView.Update();
             Console.WriteLine("Game won. 'Grats man.");
+            Console.WriteLine("Press any key to quit...");
+            Console.ReadKey(true);
         }
 
     private static bool GameWon(){
