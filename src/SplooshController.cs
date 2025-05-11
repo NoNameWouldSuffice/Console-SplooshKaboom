@@ -1,4 +1,4 @@
-﻿using SplooshUtil;
+﻿using System.Runtime.InteropServices;
 
 namespace Sploosh_Console
 {
@@ -8,6 +8,10 @@ namespace Sploosh_Console
         static GameBoard board = new(8,8);
         public static void Main()
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)){
+                Console.OutputEncoding = System.Text.Encoding.Unicode;
+            }
+            
             SplooshView boardView = new(board);
             bool fire;
             board.PlaceShipsRandomly();
