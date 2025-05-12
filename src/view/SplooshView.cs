@@ -12,6 +12,9 @@ class SplooshView
     public int boardCursorRow = 0;
     public int boardCursorCol = 0;
 
+    public int homeRow = 0;
+    public int homeCol = 0;
+
     public SplooshView(GameBoard boardIn)
     {
         gb = boardIn;
@@ -113,7 +116,7 @@ class SplooshView
                     charCol += 1;
                 }
 
-                grid[GetRowChars(r), charCol] = (resultMap[r, c] == 1) ? '⨉' : (resultMap[r, c] == 2) ? '*' : grid[GetRowChars(r), charCol];
+                grid[GetRowChars(r), charCol] = (resultMap[r, c] == 1) ? '○' : (resultMap[r, c] == 2) ? '✶' : grid[GetRowChars(r), charCol];
             }
         }
     }
@@ -141,7 +144,7 @@ class SplooshView
 
     public void Update()
     {
-        Console.Clear();
+        Console.SetCursorPosition(homeCol, homeRow);
         string gridString = CompileLayers();
         Console.WriteLine(gridString);
     }

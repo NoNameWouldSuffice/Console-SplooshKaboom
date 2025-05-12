@@ -1,4 +1,4 @@
-﻿using SplooshUtil;
+﻿using System.Runtime.InteropServices;
 
 namespace Sploosh_Console
 {
@@ -8,9 +8,18 @@ namespace Sploosh_Console
         static GameBoard board = new(8,8);
         public static void Main()
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)){
+                Console.OutputEncoding = System.Text.Encoding.Unicode;
+            }
+            
             SplooshView boardView = new(board);
             bool fire;
             board.PlaceShipsRandomly();
+            Console.Clear();
+            boardView.homeRow = Console.CursorTop;
+            boardView.homeCol = Console.CursorLeft;
+
+            Console.CursorVisible = false;
 
             while (!GameWon())
             {
@@ -55,6 +64,8 @@ namespace Sploosh_Console
             boardView.showCursor = false;
             boardView.Update();
             Console.WriteLine("Game won. 'Grats man.");
+            Console.WriteLine("Press any key to quit...");
+            Console.ReadKey(true);
         }
 
     private static bool GameWon(){
