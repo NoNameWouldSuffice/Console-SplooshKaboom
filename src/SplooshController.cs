@@ -19,6 +19,8 @@ namespace Sploosh_Console
             boardView.homeRow = Console.CursorTop;
             boardView.homeCol = Console.CursorLeft;
 
+            Console.CursorVisible = false;
+
             while (!GameWon())
             {
                 boardView.Update();
