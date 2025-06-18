@@ -6,12 +6,15 @@ class GameBoard(int width, int height)
     public readonly int Height = height;
     private List<int> _shipLengths = [4, 3, 2];
 
-
+    // shotMap - A 2-dimensional array of 1s and 0s the same size of the game board.
+    //           A 1 means that the player has fired at that space on the game board.
     private int[,] _shotMap = new int[height, width];
 
     public int[,] GetShotMap => _shotMap;
+
+    // ShipMap - A 2-dimensional array of 1s and 0s the same size of the game board.
+    //           A 1 means that the space on the game board is occupied by a ship.
     public int[,] ShipMap { get; set; } = new int[height, width];
-    // public int[,] GetShipMap => _shipMap;
     
     private List<Ship> _shipList = [];
 
@@ -19,16 +22,6 @@ class GameBoard(int width, int height)
     {
         // TODO: Add in some verification code somewhere for when the shot is outside of game board range
         _shotMap[shotR, shotC] = 1;
-    }
-
-    public void PrintShotMap()
-    {
-        SplooshArray.Print2DArray(_shotMap);
-    }
-
-    public void PrintShipMap()
-    {
-        SplooshArray.Print2DArray(ShipMap);
     }
 
     public void PlaceShip(Ship ship)
@@ -58,24 +51,42 @@ class GameBoard(int width, int height)
         return resultMap;
     }
 
+
     public void PlaceShipsRandomly()
     {
+        // Place large ships first and then smaller ships later.
         foreach (int shipLen in _shipLengths.OrderByDescending(i => i))
         {
             // Choose if ship is being placed horizontally or vertically
-
             int axis = SplooshRandom.GetRandom.Next(2);
 
+            // "line options" is the list of valid ship placements along a line (horizontal or vertical)
+            // This is represented by a tuple, containing a list each for potenial row and column numbers
+            // for the start of the ship to be placed.
+
+            // Even if the row or column of the new ship has already been determined, it's number is still 
+            // placed in a list by itself. This is for consistency, because both the row or column number could be fixed
+            // while the other axis is yet to be determined.
+
+            // "axisOptions" is the collection holding the set of options for each line (a row for horizontal placement, a col for vertical)
+            // The final placement (row, col) is determined by first randomly selecting a line options set from axisOptions, then
+            // a number is chosen from the row and col lists in that set to form the final co-ordinate.
+
             List<Tuple<List<int>, List<int>>> axisOptions;
-            Tuple<List<int>, List<int>> axisOption;
+            Tuple<List<int>, List<int>> lineOptions;
+
             Ship ship;
 
+            // Generate axisOptions list with a helper function.
             if (FindValidShipPlacements(out axisOptions, shipLen, axis))
             {
-                axisOption = SplooshRandom.GetRandomElement(axisOptions);
+                // Randomly select a lineOptions list from axisOptions
+                lineOptions = SplooshRandom.GetRandomElement(axisOptions);
 
-                int startRow = SplooshRandom.GetRandomElement(axisOption.Item1);
-                int startCol = SplooshRandom.GetRandomElement(axisOption.Item2);
+                // Grab the final row and column from the lists in the lineOptions list.
+                int startRow = SplooshRandom.GetRandomElement(lineOptions.Item1);
+                int startCol = SplooshRandom.GetRandomElement(lineOptions.Item2);
+
                 ship = new Ship(
                     startRow,
                     startCol,
@@ -84,12 +95,14 @@ class GameBoard(int width, int height)
                 );
                 PlaceShip(ship);
             }
+
+            // If there are no valid ship placements for one axis, try again with the other one.
             else if (FindValidShipPlacements(out axisOptions, shipLen, 1 - axis))
             {
-                axisOption = SplooshRandom.GetRandomElement(axisOptions);
+                lineOptions = SplooshRandom.GetRandomElement(axisOptions);
 
-                int startRow = SplooshRandom.GetRandomElement(axisOption.Item1);
-                int startCol = SplooshRandom.GetRandomElement(axisOption.Item2);
+                int startRow = SplooshRandom.GetRandomElement(lineOptions.Item1);
+                int startCol = SplooshRandom.GetRandomElement(lineOptions.Item2);
 
                 ship = new Ship(
                     startRow,
@@ -121,6 +134,10 @@ class GameBoard(int width, int height)
 
         axisOptions = [];
 
+        // Ship location search algorithm:
+
+        // Iterate over each line in chosen axis (across columns or down rows)
+        // Sweep down the line and count the number of 
         for (int lineIndex = 0; lineIndex < ShipMap.GetLength(axis); lineIndex++)
         {
             int count = 0;
