@@ -32,6 +32,7 @@ class SplooshView
         return 2 * height + 1;
     }
 
+    // Function to translate game space co-ordinates to character display co-ordinates
     private int GetRowChars(int row)
     {
         return 2 * row + 1;
@@ -111,6 +112,9 @@ class SplooshView
             for (int c = 0; c < gb.Width; c++)
             {
                 int charCol = GetColChars(c);
+
+                // Add offset to the hit indicators on vertical ships so that they render beside the ship drawing characters
+                // instead of overwriting them
                 if (grid[GetRowChars(r), GetColChars(c)] == '╽' || grid[GetRowChars(r), GetColChars(c)] == '╿' || grid[GetRowChars(r), GetColChars(c)] == '┃')
                 {
                     charCol += 1;
